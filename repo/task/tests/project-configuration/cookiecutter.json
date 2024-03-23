@@ -1,0 +1,16 @@
+{
+  "project_name": "My New Project",
+  "project_slug": "{{ cookiecutter.project_name|lower|replace(' ', '-') }}",
+  "pkg_name": "{{ cookiecutter.project_slug|replace('-', '') }}",
+  "description": "Project description",
+  "author_name": "John Doe",
+  "author_email": "doe@example.net",
+  "__prompts__": {
+    "package_name": "Select your project name",
+    "project_slug": "Project directory",
+    "pkg_name": "Python package name",
+    "description": "Short description",
+    "author_name": "Author full name",
+    "author_email": "Author email"
+  }
+}
