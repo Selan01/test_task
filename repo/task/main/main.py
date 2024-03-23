@@ -71,7 +71,7 @@ class DownloadRepo:
                 return await response.json()
 
     async def download_file(self, link, name, sem):
-        """Скачивание файлов из репозитария.
+        """Скачивание файлов из репозитория.
 
         Args:
             link: ссылка для построения полного url файла
@@ -99,24 +99,27 @@ class DownloadRepo:
 
     async def main(self):
         """
-        Функция обьединяющая всю логику модуля.
+        Функция объединяющая всю логику модуля.
 
-        Саздание временной директории
+        Создание временной директории
 
         Returns:
             get_hash() (list): список вычисленных хешей
         """
         if not os.path.exists(self.directory):
             os.mkdir(self.directory)
-
+        urls = []
         sem = asyncio.BoundedSemaphore(self.NUMBER_OF_TREADS)
-        list_name_for_urls = await asyncio.gather(
-            asyncio.create_task(self.download_list_name_file(self.url_list_file)),
-        )
+        for _ in range(3):
+            list_name_for_urls = await asyncio.gather(
+                asyncio.create_task(self.download_list_name_file(self.url_list_file)),)
+            urls.append(list_name_for_urls)
+
 
         list_urls = []
-        for name in list_name_for_urls[0]:
-            list_urls.append(self.url + name)
+        for i in range(3):
+            for name in urls[i][0]:
+                list_urls.append(self.url + name)
 
         await asyncio.gather(
             *[
