@@ -111,14 +111,12 @@ class DownloadRepo:
         urls = []
         sem = asyncio.BoundedSemaphore(self.NUMBER_OF_TREADS)
         for _ in range(3):
-            list_name_for_urls = await asyncio.gather(
-                asyncio.create_task(self.download_list_name_file(self.url_list_file)),)
+            list_name_for_urls = await asyncio.gather(asyncio.create_task(self.download_list_name_file(self.url_list_file)))
             urls.append(list_name_for_urls)
 
-
         list_urls = []
-        for i in range(3):
-            for name in urls[i][0]:
+        for item in range(3):
+            for name in urls[item][0]:
                 list_urls.append(self.url + name)
 
         await asyncio.gather(
@@ -138,6 +136,6 @@ if __name__ == '__main__':
     url_list_file = 'https://gitea.radium.group/radium/project-configuration/tree-list/branch/master'
 
     BASEDIR = os.path.abspath(os.path.dirname(__file__))
-    directory = f'{BASEDIR}/project-configuration/'
+    directory = f'{BASEDIR}/download/'
     download = DownloadRepo(url, url_list_file, directory)
     asyncio.run(download.main())
